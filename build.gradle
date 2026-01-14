@@ -18,6 +18,10 @@ group = mod_group_id
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    maven {
+        url = uri("https://cursemaven.com")
+        name = name("Curse Maven")
+    }
 }
 
 base {
@@ -96,6 +100,19 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
+    // sodium
+    runtimeOnly "curse.maven:sodium-394468:6382651"
+    // modern-ui
+    // runtimeOnly "curse.maven:modern-ui-352491:6956436"
+    // curios api
+    // implementation "curse.maven:curios-309927:6529130"
+    // jade
+    // implementation "curse.maven:jade-324717:7428884"
+    // prism
+    // implementation "curse.maven:prism-lib-638111:6372979"
+    // jei
+    runtimeOnly "curse.maven:jei-238222:7391682"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -118,7 +135,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
-
+minecraft {
+    accessTransformers {
+        file 'src/main/resources/META-INF/accesstransformer.cfg'
+    }
+}
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.

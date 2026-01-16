@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -28,6 +27,7 @@ public class NewFont extends Font {
     boolean C = true;
     static boolean D = true;
     int alpha = 255;
+    // the fields below will pass the font buffer to coreRender
     private static Matrix4f matrix4ff;
     private static MultiBufferSource source;
     private static boolean bb1;
@@ -85,7 +85,7 @@ public class NewFont extends Font {
         return tick;
     }
 
-    private void render_text(String text,
+    private void renderText(String text,
                              float new_x,
                              float new_y,
                              int rgb,
@@ -99,26 +99,12 @@ public class NewFont extends Font {
         if (!isShadow) {
             super.drawInBatch(text, new_x, new_y, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
             super.drawInBatch(text, new_x, new_y, rgb, true, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
-            super.drawInBatch(text, new_x + 0.75f, new_y + 0.75f, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
-            super.drawInBatch(text, new_x, new_y, rgb, true, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
+            //super.drawInBatch(text, new_x + 0.75f, new_y + 0.75f, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
+            //super.drawInBatch(text, new_x, new_y, rgb, true, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
         } else if (matrix4ff != null && source != null) {
             super.drawInBatch(text, new_x, new_y, rgb, bb1, matrix4ff, source, displayMode, ii, ii1);
-            super.drawInBatch(text, new_x + 0.75f, new_y + 0.75f, rgb, bb1, matrix4ff, source, displayMode, ii, ii1);
+            //super.drawInBatch(text, new_x + 0.75f, new_y + 0.75f, rgb, bb1, matrix4ff, source, displayMode, ii, ii1);
         }
-    }
-
-    private void render(String text,
-                        float new_x,
-                        float new_y,
-                        int rgb,
-                        boolean isShadow,
-                        Matrix4f matrix,
-                        MultiBufferSource buffer,
-                        Font.DisplayMode displayMode,
-                        int backgroundColor,
-                        int packedLightCoords,
-                        boolean bidirectional) {
-        render_text(text, new_x, new_y, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
     }
 
     private int CoreRender(String text,
@@ -134,7 +120,7 @@ public class NewFont extends Font {
                            boolean NoRender) {
         boolean r = false;
         if (!NoRender) {
-            // text = text.replaceAll("(?i)§[0-9A-FK-OR]", "");
+            text = text.replaceAll("(?i)§[0-9A-FK-OR]", "");
             if (Mode == 0) {
                 float the_step = 0.0f;
                 float centerX = x + (float) this.width(text) / 2;
@@ -157,13 +143,13 @@ public class NewFont extends Font {
                         r = true;
                     }
                     int rgb = Color.HSBtoRGB(this.nextColorHue(the_step) / 100.0f, 0.8f, 0.8f);
-                    if (!r && C) {
-                        render(s, charX, charY, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
-                    } else if (D) {
-                        render(s, x + offset, y + offset, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
-                    } else {
-                        render(s, x, y, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
-                    }
+                    //if (!r && C) {
+                        //render(s, charX, charY, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
+                    //} else if (D) {
+                        //render(s, x + offset, y + offset, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
+                    //} else {
+                    renderText(s, x, y, rgb, isShadow, matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional);
+                    //}
                     x += (float) this.width(s);
                     the_step += 1.0f;
                 }
@@ -187,33 +173,12 @@ public class NewFont extends Font {
         ii1 = i1;
     }
 
-
-    @Override
-    public int drawInBatch(String text, float x, float y, int color, boolean dropShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int backgroundColor, int packedLightCoords, boolean bidirectional) {
-        draw(dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-        //CoreRender(text, x, y,dropShadow,matrix, buffer, displayMode, backgroundColor, packedLightCoords, bidirectional,false);
-        return super.drawInBatch(text,x,y,color,dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords,bidirectional);
-    }
-
+    // this will be invoked when render the font
     @Override
     public int drawInBatch(FormattedCharSequence text, float x, float y, int color, boolean dropShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int backgroundColor, int packedLightCoords) {
         draw(dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-        CoreRender(getString(text), x, y,dropShadow,matrix, buffer, displayMode, backgroundColor, packedLightCoords, false,false);
-        return super.drawInBatch(text,x,y,color,dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-    }
-
-    @Override
-    public int drawInBatch(Component text, float x, float y, int color, boolean dropShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int backgroundColor, int packedLightCoords) {
-        draw(dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-        this.drawInBatch(text.getVisualOrderText(), x, y,color,dropShadow,matrix, buffer, displayMode, backgroundColor, packedLightCoords);
-        return super.drawInBatch(text,x,y,color,dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-    }
-
-    @Override
-    public int drawInBatch(String text, float x, float y, int color, boolean dropShadow, Matrix4f matrix, MultiBufferSource buffer, DisplayMode displayMode, int backgroundColor, int packedLightCoords) {
-        draw(dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
-        CoreRender(text, x, y,dropShadow,matrix, buffer, displayMode, backgroundColor, packedLightCoords, false,false);
-        return super.drawInBatch(text,x,y,color,dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
+        return CoreRender(getString(text), x, y,dropShadow,matrix, buffer, displayMode, backgroundColor, packedLightCoords, false,false);
+        //super.drawInBatch(text,x,y,color,dropShadow,matrix,buffer,displayMode,backgroundColor,packedLightCoords);
     }
 
 }

@@ -1,5 +1,6 @@
 package github.ihatechpack.api;
 
+import com.mojang.logging.LogUtils;
 import github.ihatechpack.api.font.NewFont;
 import net.minecraft.client.gui.Font;
 import net.minecraft.world.food.FoodProperties;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 /**
  * @description: TODO
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod(IHateAPI.MOD_ID)
 public class IHateAPI {
     public static final String MOD_ID = "ihateapi";
+    public static final Logger LOGGER = LogUtils.getLogger();
     private static IHateAPI instance;
     public IHateAPI(IEventBus modBus){
         instance = this; // single instance mode

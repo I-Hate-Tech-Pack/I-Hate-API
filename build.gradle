@@ -103,7 +103,7 @@ dependencies {
     // sodium
     runtimeOnly "curse.maven:sodium-394468:6382651"
     // modern-ui
-    // runtimeOnly "curse.maven:modern-ui-352491:6956436"
+    runtimeOnly "curse.maven:modern-ui-352491:6956436"
     // curios api
     // implementation "curse.maven:curios-309927:6529130"
     // jade

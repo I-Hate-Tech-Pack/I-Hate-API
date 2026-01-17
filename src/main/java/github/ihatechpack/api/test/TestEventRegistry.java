@@ -1,6 +1,5 @@
-package github.ihatechpack.api.client;
+package github.ihatechpack.api.test;
 
-import github.ihatechpack.api.IHateAPI;
 import github.ihatechpack.api.client.font.RainbowGradationFont;
 import net.minecraft.client.gui.Font;
 import net.minecraft.world.item.ItemStack;

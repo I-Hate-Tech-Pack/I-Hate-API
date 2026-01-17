@@ -60,16 +60,7 @@ public class RainbowGradationFont extends Font {
     }
 
     // this will render all chars
-    private int renderTextRainbowGradation(FormattedCharSequence text,
-                                           float x,
-                                           float y,
-                                           boolean isShadow,
-                                           Matrix4f matrix,
-                                           MultiBufferSource buffer,
-                                           Font.DisplayMode displayMode,
-                                           int backgroundColor,
-                                           int packedLightCoords,
-                                           boolean bidirectional) {
+    private int renderTextRainbowGradation(FormattedCharSequence text, float x, float y, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, Font.DisplayMode displayMode, int backgroundColor, int packedLightCoords, boolean bidirectional) {
         // clear § chars, but the font will be performed correctly
         // text = text.replaceAll("(?i)§[0-9A-FK-OR]", "");
 
@@ -89,17 +80,7 @@ public class RainbowGradationFont extends Font {
         return (int) cur_x[0];
     }
 
-    private int renderTextRainbowGradation_matches(FormattedCharSequence text,
-                                                   float x,
-                                                   float y,
-                                                   int color,
-                                                   boolean isShadow,
-                                                   Matrix4f matrix,
-                                                   MultiBufferSource buffer,
-                                                   Font.DisplayMode displayMode,
-                                                   int backgroundColor,
-                                                   int packedLightCoords,
-                                                   boolean bidirectional) {
+    private int renderTextRainbowGradation_matches(FormattedCharSequence text, float x, float y, int color, boolean isShadow, Matrix4f matrix, MultiBufferSource buffer, Font.DisplayMode displayMode, int backgroundColor, int packedLightCoords, boolean bidirectional) {
         final String origin = pullString(text);
 
         // regex and clean text

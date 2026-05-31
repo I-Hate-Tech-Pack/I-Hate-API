@@ -162,16 +162,37 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
+tasks.register('sourcesJar', Jar) {
+    archiveClassifier = 'sources'
+    manifest {
+        attributes([
+                "Specification-Title": "ihateapi",
+                "Specification-Vendor": "HowXu",
+                "Specification-Version": "1",
+                "Implementation-Title": "ihateapi",
+                "Implementation-Version": "${mod_version}",
+                "Implementation-Vendor": "HowXu",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+    from sourceSets.main.allJava
+}
+
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact sourcesJar
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/repo"
+            name = "HowXu"
+            url = uri("https://maven.howxu.cn/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
         }
     }
 }
